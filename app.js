@@ -122,6 +122,8 @@ app.route("/articles/:articleTitle")
   });
 });
 
-app.listen(4000, function(){
- console.log("app starting listening")
-});
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
+app.listen(port);
