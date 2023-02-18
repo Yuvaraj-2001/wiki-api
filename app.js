@@ -10,7 +10,9 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
+app.use(cors({
+  origin: "*"
+}))
 mongoose.set('strictQuery', true);
 app.use(bodyParser.json({}));
 app.use(express.static("public"));
