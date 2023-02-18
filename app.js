@@ -2,14 +2,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
+var cors = require('cors')
 
 const app = express();
 
 app.set('view engine', 'ejs');
-
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
 mongoose.set('strictQuery', true);
 app.use(bodyParser.json({}));
 app.use(express.static("public"));
@@ -74,8 +75,11 @@ app.route("/article").post(function(req, res){
 
 
 ///////////////////////// Pitch PRO ////////////////
-app.route("/pitchpro")
+app.route("/pitchpro", cors())
 .get(function(req, res){
+  // res.setHeader('Access-Control-Allow-Origin', '*');
+  // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  // console.log("coors set");
   Pitch.find(function(err, articles){
     if (articles.length === 0) {
       res.status(404);
@@ -83,6 +87,7 @@ app.route("/pitchpro")
      
     } else if(articles) {
       const jsonArticles = JSON.stringify(articles);
+      console.log("coors set 1");
       res.send(jsonArticles);
     }else{
       res.status(400);
