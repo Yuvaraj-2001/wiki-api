@@ -32,9 +32,86 @@ const pitchProContactSchema = {
   username: String,
 }
 
+const emojiPedia = {
+  emoji: String,
+  title: String,
+  description: String,
+}
+
 const Pitch = mongoose.model("pitchs", pitchProContactSchema);
 const Article = mongoose.model("articles", articleSchema);
+const Emoji = mongoose.model("emojies", emojiPedia);
 
+/////////////////////// EMOJIES /////////////////////
+app.route("/all-emojies",  cors()).get(function(req, res){
+  Emoji.find((err, save)=>{
+      if(save)
+      res.send(save)
+  })
+});
+app.route("/emojies/:emoji",  cors())
+.get(function(req, res){
+  Emoji.findOne({emoji: req.params.emoji}, function(err, result){
+    if (result){
+      res.status(200);
+      res.send(result);
+    } else {
+      res.status(400);
+      res.send("This Emoji is not existed in the Databse.");
+    }
+  });
+});
+
+app.route("/emojies",  cors())
+.post(function(req, res){
+  const newEmoji = Emoji({
+    emoji: req.body.emoji,
+    title: req.body.title,
+    description: req.body.description
+  });
+  console.log(req.body.emoji, req.body.title, req.body.description);
+  Emoji.findOne({emoji: req.body.emoji}, function(err, emoji){
+    if (emoji){
+      res.status(400);
+      res.send("Emoji Already Exist");
+    } else {
+      save();
+    }
+  });
+  console.log(res.body);
+  function save(){
+    newEmoji.save(function(err){
+      if (!err){
+        res.send("Successfully added a new Emoji.");
+      } else {
+        res.status(500);
+        res.send(err);
+      }
+    });
+  }
+})
+.put(function(req, res){
+  const articleTitle = req.body.emoji;
+  Emoji.updateOne(
+    {emoji: articleTitle},
+    {title: req.body.title, description: req.body.description },
+    function(err){
+      if (!err){
+        res.send("Successfully updated the content of the selected emoji.");
+      } else {
+        res.send(err);
+      }
+    });
+})
+.delete(function(req, res){
+  Emoji.deleteMany(function(err){
+      if (!err){
+      res.send("Successfully deleted all the entries in emoji.");
+      } else {
+      res.send(err);
+      }
+  });
+});
 /////////////////////////All Articles///////////////////////////////////
 
 app.route("/articles")
@@ -74,6 +151,7 @@ app.route("/article").post(function(req, res){
         }
     });
 });
+
 
 
 ///////////////////////// Pitch PRO ////////////////
@@ -131,6 +209,9 @@ app.route("/pitchpro", cors())
       }
   });
 });
+
+
+
 /////////////////////////Individual Articles///////////////////////////////////
 
 app.route("/articles/:articleTitle")
@@ -188,6 +269,7 @@ app.route("/articles/:articleTitle")
     }
   });
 });
+
 
 let port = process.env.PORT;
 if (port == null || port == "") {
