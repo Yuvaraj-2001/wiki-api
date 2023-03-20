@@ -19,7 +19,7 @@ var transport = nodeMail.createTransport(
 function emailApi(email, mobile, location, job, file, fileName){
     return {
       from: 'yuvaraj.mail.services@gmail.com',
-      to: ['yuvayuvaraj720444@gmail.com'],
+      to: ['yuvayuvaraj720444@gmail.com', 'divis7088@gmail.com'],
       subject: "Direct Pitch Pro Carrers",
       html: `
         <h2>Carrers Entry from</h2>
