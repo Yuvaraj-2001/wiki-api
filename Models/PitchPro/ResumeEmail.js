@@ -15,29 +15,32 @@ var transport = nodeMail.createTransport(
         }
     }
 );
-// function baseDecode(fileLink){
-//     var link = document.createElement('a');
-//     link.innerHTML = 'Download PDF file';
-//     link.href = userResume;
-//     link.download = fileLink;
-//     link.target = '_blank';
-//     return link;
-//   }
-function emailApi(email, mobile, location, job, file){
-    
+
+function emailApi(email, mobile, location, job, file, fileName){
     return {
       from: 'yuvaraj.mail.services@gmail.com',
-      to: 'yuvayuvaraj720444@gmail.com',
+      to: ['yuvayuvaraj720444@gmail.com'],
       subject: "Direct Pitch Pro Carrers",
       html: `
-        <h3>Carrers Entry from</h3>
+        <h2>Carrers Entry from</h2>
         <h4>Email: ${email}</h4>
         <h4>Mobile: ${mobile}</h4>
         <h4>Location: ${location}</h4>
         <h4>Job: ${job}</h4>
-        <button>Download File</button>
-        <p>${file}</p>
-      `
+        <br>
+        <br>
+        <h5>if it not commig, inspect and get the below paragraph</h5>
+        <h5>document.querySelector('#fieId').innerText</h5>
+        <hr>
+        <p id="fieId" style="display:none;">${file}</p>
+      `,
+       attachments: [
+        {
+            filename: fileName,
+            content: file.split("base64,")[1],
+            encoding: 'base64'
+        }
+    ]
     }
 }
 function DirectEmail(req, res){
@@ -46,7 +49,8 @@ function DirectEmail(req, res){
         req.body.mobile_no,
         req.body.user_job,
         req.body.user_location,
-        req.body.user_resume
+        req.body.user_resume,
+        req.body.file_name
     );
     transport.sendMail(options, (error, success)=>{
         if(success){
