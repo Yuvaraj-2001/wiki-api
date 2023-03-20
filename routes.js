@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const EmojiModel = require('./Models/emojipedia');
 const ArticleModel = require('./Models/aritcles');
 const PitchProContact = require('./Models/PitchPro/PitchProContact');
+const PitchEmail = require('./Models/PitchPro/ResumeEmail');
 
 
 // App Initialisation Start
@@ -58,6 +59,9 @@ app.route("/pitchpro", cors())
 .get(PitchProContact.findAllEntries)
 .post(PitchProContact.PostOnePitch)
 .delete(PitchProContact.DeletePitch);
+
+app.route('/pitchpro/email', cors())
+.post(PitchEmail.DirectEmail);
 ///////////// PITCH PRO CONTACT FORM END /////////////////////////////
 
 
