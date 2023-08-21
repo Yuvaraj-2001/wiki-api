@@ -9,6 +9,9 @@ const ArticleModel = require('./Models/aritcles');
 const PitchProContact = require('./Models/PitchPro/PitchProContact');
 const PitchEmail = require('./Models/PitchPro/ResumeEmail');
 
+// TWILLO
+const TWILO = require('./Models/twillo');
+
 
 // App Initialisation Start
 app.set('view engine', 'ejs');
@@ -51,8 +54,13 @@ app.route("/article/:articleTitle")
 .delete(ArticleModel.DeleteSingleArticle);
 //////////////// Articles Route Configs END//////////////////////////////
 
-
-
+/////////////////// TWILO MSG VERIFICATION////////////////
+app.route("/send-message")
+.post(TWILO.sendMessage);
+app.route("/send-otp")
+.post(TWILO.sendOtp);
+app.route("/verify-otp")
+.post(TWILO.verifyOtp);
 
 ////////////// PITCH PRO CONTACT FORM //////////////////////////////////
 app.route("/pitchpro", cors())
