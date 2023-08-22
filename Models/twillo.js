@@ -1,17 +1,24 @@
 
-const client = require('twilio')("ACcd8810e247e103bea01c2f9c2d7c6a2c", "09c706c639273ed51d73a5782528e83a");
-const verify = require('twilio')("AC83d76954013c065abc6a0634abeb0b15", "ddde86b707d1769c67195e8a7d056f3f");
+const accountSid = 'ACcd8810e247e103bea01c2f9c2d7c6a2c';
+const authToken = 'ccd2287c7ed9d228fc9a9bc824a98c02';
+const client = require('twilio')(accountSid, authToken);
+const verify = require('twilio')("AC83d76954013c065abc6a0634abeb0b15", "e034f9bf8f4c139c89458a9f015a5bcd");
 
 
 function sendMessage(req, res){
+    console.log(req.body);
     try {
-        const message = client.messages.create({
+        client.messages
+        .create({
             body: req.body.message,
             from: '+17067024044',
             to: req.body.phone
-        }).then(function(call){
-            console.log('Message sent SID :', call);
+        }).then(function(){
+            console.log('Message sent successfully');
             res.status(200).json({ message: 'Message sent successfully' });
+        }).catch ((error) => {
+            console.error('Error sending message:', error);
+            res.status(500).json({ error: 'An error occurred while sending the message' });
         });
     } catch (error) {
         console.error('Error sending message:', error);
